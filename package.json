@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "npx tsx be/seed.ts",
+    "push": "drizzle-kit push:pg"
   },
   "dependencies": {
     "@nivo/bar": "^0.85.1",
@@ -14,8 +16,10 @@
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
+    "@vercel/postgres": "^0.7.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "drizzle-orm": "^0.30.1",
     "lucide-react": "^0.356.0",
     "next": "14.1.3",
     "react": "^18",
@@ -28,6 +32,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
+    "drizzle-kit": "^0.20.14",
     "eslint": "^8",
     "eslint-config-next": "14.1.3",
     "postcss": "^8",
