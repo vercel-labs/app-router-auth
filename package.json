@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "npx tsx be/seed.ts",
-    "push": "drizzle-kit push:pg"
+    "push": "drizzle-kit push:pg",
+    "seed": "npx tsx be/seed.ts"
   },
   "dependencies": {
     "@nivo/bar": "^0.85.1",
