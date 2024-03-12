@@ -1,6 +1,13 @@
 import Link from "next/link"
 import { MenuIcon } from "@/components/ui/icons"
 
+const links = [
+  { href: "#", title: "Home" },
+  { href: "#", title: "About" },
+  { href: "#", title: "Services" },
+  { href: "#", title: "Contact" },
+]
+
 export default function Layout({
   children,
 }: Readonly<{
@@ -11,18 +18,15 @@ export default function Layout({
       <div className="border-b border-gray-100">
         <div className="container flex items-center justify-between px-4 md:px-6 py-4 mx-auto max-w-7xl">
           <nav className="flex items-center space-x-4 text-sm">
-            <Link className="font-bold text-gray-900" href="#">
-              Home
-            </Link>
-            <Link className="font-medium text-gray-500" href="#">
-              About
-            </Link>
-            <Link className="font-medium text-gray-500" href="#">
-              Services
-            </Link>
-            <Link className="font-medium text-gray-500" href="#">
-              Contact
-            </Link>
+            {links.map((link) => (
+              <Link
+                className="font-bold text-gray-900"
+                href={link.href}
+                key={link.title}
+              >
+                {link.title}
+              </Link>
+            ))}
           </nav>
           <div className="hidden md:flex items-center space-x-4">
             <Link

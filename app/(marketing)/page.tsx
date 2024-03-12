@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { MenuIcon } from "@/components/ui/icons"
 
 export default function Page() {
   return (

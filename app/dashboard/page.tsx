@@ -6,14 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  PackageIcon,
-  HomeIcon,
-  ShoppingCartIcon,
-  UsersIcon,
-  LineChartIcon,
-  LogOutIcon,
-} from "@/components/ui/icons"
 import Image from "next/image"
 
 export default function Page() {
