@@ -7,4 +7,4 @@ export default defineConfig({
   dbCredentials: {
     connectionString: process.env.POSTGRES_URL!,
   },
-})
+});
