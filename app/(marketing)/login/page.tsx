@@ -1,16 +1,16 @@
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function Login() {
   return (
-    <div className="flex items-center w-1/4 px-4 sm:px-6 lg:px-8">
-      <div className="w-full mx-auto space-y-8">
+    <div className="flex w-full items-center p-6 md:w-1/3">
+      <div className="mx-auto w-full space-y-8">
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold">Login</h1>
-          <p className="text-gray-500 text-sm">
+          <p className="text-sm text-gray-500">
             Enter your email below to login to your account
           </p>
         </div>
@@ -46,12 +46,12 @@ export default function Login() {
         </div>
 
         <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
+          Don&apos;t have an account?{' '}
           <Link className="underline" href="/signup">
             Sign up
           </Link>
         </div>
       </div>
     </div>
-  )
+  );
 }

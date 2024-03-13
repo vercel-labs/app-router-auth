@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from 'next/link';
 
 export default function Page() {
   return (
@@ -12,7 +12,7 @@ export default function Page() {
           web apps.
         </p>
       </div>
-      <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
+      <div className="flex flex-col justify-center gap-2 min-[400px]:flex-row">
         <Link
           className="inline-flex h-10 items-center justify-center rounded-md border border-gray-200 bg-white px-8 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50"
           href="/signup"
@@ -21,5 +21,5 @@ export default function Page() {
         </Link>
       </div>
     </div>
-  )
+  );
 }
