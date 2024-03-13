@@ -11,8 +11,10 @@ import {
   LoginFormSchema,
   SignupFormSchema,
 } from '@/lib/definitions';
-import { createSession } from '@/lib/session';
+import { createSession, deleteSession } from '@/lib/session';
 import bcrypt from 'bcrypt';
+import { eq } from 'drizzle-orm';
+import { redirect } from 'next/navigation';
 
 export async function signup(state: FormState, formData: FormData) {
   // 1. Validate form fields
@@ -57,7 +59,6 @@ export async function signup(state: FormState, formData: FormData) {
   }
 }
 
-// TODO: Login and logout functionality
 export async function login(state: FormState, formData: FormData) {
   // 1. Validate form fields
   const validatedFields = LoginFormSchema.safeParse({
@@ -66,12 +67,43 @@ export async function login(state: FormState, formData: FormData) {
   });
 
   // 2. If any form fields are invalid, return early and display errors
-  // 3. Query the database
+  if (!validatedFields.success) {
+    return {
+      message: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  // 3. Query the database for the user with the given email
+  const user = await db.query.users.findFirst({
+    where: eq(users.email, validatedFields.data.email),
+  });
+
+  // If user is not found, return an error
+  if (!user) {
+    return {
+      message: 'No user found with that email.',
+    };
+  }
+
   // 4. Compare the user's password with the hashed password in the database
+  const passwordMatch = await bcrypt.compare(
+    validatedFields.data.password,
+    user.password,
+  );
+
+  // If the password does not match, return an error
+  if (!passwordMatch) {
+    return {
+      message: 'Invalid login credentials.',
+    };
+  }
+
   // 5. If the password is correct, create a session for the user
+  await createSession(user.id);
 }
 
 export async function logout() {
-  // 1. Destroy the user's session
-  // 2. Redirect the user to the homepage
+  console.log('logging out');
+  deleteSession();
+  redirect('/login');
 }

@@ -1,10 +1,16 @@
+'use client';
+
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { login } from '@/lib/auth';
+import { useFormState, useFormStatus } from 'react-dom';
 
 export default function Login() {
+  const [state, action] = useFormState(login, undefined);
+
   return (
     <div className="flex w-1/4 items-center px-4 sm:px-6 lg:px-8">
       <div className="mx-auto w-full space-y-8">
@@ -14,12 +20,13 @@ export default function Login() {
             Enter your email below to login to your account
           </p>
         </div>
-        <form>
+        <form action={action}>
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 placeholder="m@example.com"
                 required
                 type="email"
@@ -35,7 +42,7 @@ export default function Login() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input id="password" required type="password" />
+              <Input id="password" required type="password" name="password" />
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox id="remember" />
@@ -43,6 +50,7 @@ export default function Login() {
                 Remember me
               </Label>
             </div>
+            {state?.message && <p className="text-red-500">{state.message}</p>}
             <Button className="w-full">Login</Button>
             <Button className="w-full" variant="outline">
               Login with Google
