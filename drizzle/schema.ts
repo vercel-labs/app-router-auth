@@ -1,4 +1,12 @@
-import { serial, text, pgTable, uniqueIndex } from "drizzle-orm/pg-core"
+import {
+  serial,
+  text,
+  pgTable,
+  uniqueIndex,
+  integer,
+  timestamp,
+  time,
+} from "drizzle-orm/pg-core"
 import { InferInsertModel } from "drizzle-orm"
 
 export const users = pgTable(
@@ -16,4 +24,15 @@ export const users = pgTable(
   },
 )
 
+export const sessions = pgTable("sessions", {
+  id: serial("id").primaryKey(),
+  userId: integer("userId")
+    .references(() => users.id)
+    .notNull(),
+  token: text("token").unique().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+})
+
 export type NewUser = InferInsertModel<typeof users>
+export type NewSession = InferInsertModel<typeof sessions>
