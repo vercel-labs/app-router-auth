@@ -1,13 +1,13 @@
-"use client"
+'use client';
 
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { signup } from "@/lib/auth"
-import { useFormState, useFormStatus } from "react-dom"
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { signup } from '@/lib/auth';
+import { useFormState, useFormStatus } from 'react-dom';
 
 export function SignupForm() {
-  const [state, action] = useFormState(signup, undefined)
+  const [state, action] = useFormState(signup, undefined);
 
   return (
     <form action={action}>
@@ -42,16 +42,16 @@ export function SignupForm() {
       )}
       <SignupButton />
     </form>
-  )
+  );
 }
 
 function SignupButton() {
   // TODO: Style button pending state
-  const { pending } = useFormStatus()
+  const { pending } = useFormStatus();
 
   return (
     <Button className="w-full" type="submit">
       Register
     </Button>
-  )
+  );
 }

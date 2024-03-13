@@ -2,33 +2,37 @@
 // signing up, logging in, and logging out.
 // see `session.ts` for the session management logic.
 
-"use server"
+'use server';
 
-import { db } from "@/drizzle/db"
-import { users } from "@/drizzle/schema"
-import { FormState, LoginFormSchema, SignupFormSchema } from "@/lib/definitions"
-import { createSession } from "@/lib/session"
-import bcrypt from "bcrypt"
+import { db } from '@/drizzle/db';
+import { users } from '@/drizzle/schema';
+import {
+  FormState,
+  LoginFormSchema,
+  SignupFormSchema,
+} from '@/lib/definitions';
+import { createSession } from '@/lib/session';
+import bcrypt from 'bcrypt';
 
 export async function signup(state: FormState, formData: FormData) {
   // 1. Validate form fields
   const validatedFields = SignupFormSchema.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-  })
+    name: formData.get('name'),
+    email: formData.get('email'),
+    password: formData.get('password'),
+  });
 
   // 2. If any form fields are invalid, return early and display errors
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-    }
+    };
   }
 
   // 3. Prepare data for insertion into database
-  const { name, email, password } = validatedFields.data
+  const { name, email, password } = validatedFields.data;
   // 3.1 Hash the user's password
-  const hashedPassword = await bcrypt.hash(password, 10)
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   // 4. Insert the user into the database
   try {
@@ -39,17 +43,17 @@ export async function signup(state: FormState, formData: FormData) {
         email,
         password: hashedPassword,
       })
-      .returning({ id: users.id })
+      .returning({ id: users.id });
 
     if (data && data.length > 0) {
-      const user = data[0]
+      const user = data[0];
       // 5. Create a session for the user
-      createSession(user.id)
+      createSession(user.id);
     }
   } catch (error) {
     return {
-      message: "An error occurred while creating your account.",
-    }
+      message: 'An error occurred while creating your account.',
+    };
   }
 }
 
@@ -57,9 +61,9 @@ export async function signup(state: FormState, formData: FormData) {
 export async function login(state: FormState, formData: FormData) {
   // 1. Validate form fields
   const validatedFields = LoginFormSchema.safeParse({
-    email: formData.get("email"),
-    password: formData.get("password"),
-  })
+    email: formData.get('email'),
+    password: formData.get('password'),
+  });
 
   // 2. If any form fields are invalid, return early and display errors
   // 3. Query the database

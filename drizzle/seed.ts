@@ -1,5 +1,5 @@
-import { insertUser } from "@/drizzle/db"
-import { NewUser } from "@/drizzle/schema"
+import { insertUser } from '@/drizzle/db';
+import { NewUser } from '@/drizzle/schema';
 
 async function main() {
   const newUser: NewUser = {
