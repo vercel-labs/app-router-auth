@@ -13,6 +13,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+	const navLinks = [
+		{ title: 'Home', href: '/dashboard', badge: 0 },
+		{ title: 'Orders', href: '#', badge: 3 },
+		{ title: 'Products', href: '#', badge: 0 },
+		{ title: 'Customers', href: '#', badge: 0 },
+		{ title: 'Analytics', href: '#', badge: 0 }
+	];
+	const activeLink = '/dashboard';
 	return (
 		<div className="flex min-h-screen w-full">
 			<div className="hidden border-r dark:border-gray-700 lg:block w-80">
@@ -25,44 +33,24 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 					</div>
 					<div className="flex-1 overflow-auto py-2">
 						<nav className="grid items-start px-4 text-sm font-medium">
-							<Link
-								className="flex items-center gap-3  text-gray-900 bg-gray-100 rounded-lg px-3 py-2 transition-all hover:text-gray-900 hover:dark:text-gray-300"
-								href="#"
-							>
-								<HomeIcon className="h-4 w-4" />
-								Home
-							</Link>
-							<Link
-								className="hover:dark:text-gray-300 flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900"
-								href="#"
-							>
-								<ShoppingCartIcon className="h-4 w-4" />
-								Orders
-								<Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-									3
-								</Badge>
-							</Link>
-							<Link
-								className="hover:dark:text-gray-300 flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-gray-500  hover:text-gray-900"
-								href="#"
-							>
-								<PackageIcon className="h-4 w-4" />
-								Products
-							</Link>
-							<Link
-								className="hover:dark:text-gray-300 flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900"
-								href="#"
-							>
-								<UsersIcon className="h-4 w-4" />
-								Customers
-							</Link>
-							<Link
-								className="hover:dark:text-gray-300 flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900"
-								href="#"
-							>
-								<LineChartIcon className="h-4 w-4" />
-								Analytics
-							</Link>
+							{navLinks.map((link) => (
+								<Link
+									className={`${
+										activeLink === link.href
+											? 'bg-gray-100 text-gray-900 hover:text-gray-900 hover:dark:text-gray-300'
+											: ''
+									} hover:dark:text-gray-300 flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900`}
+									href={link.href}
+									key={link.title}
+								>
+									<span>{link.title}</span>
+									{link.badge > 0 && (
+										<Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
+											{link.badge}
+										</Badge>
+									)}
+								</Link>
+							))}
 						</nav>
 					</div>
 					<div className="border-t dark:border-gray-700 p-4">
@@ -83,7 +71,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 						<span className="sr-only">Home</span>
 					</Link>
 					<h1 className="hidden md:blobk font-semibold text-lg">Dashboard</h1>
-					<div className="ml-auto flex items-center md:gap-4">
+					<div className="ml-auto flex items-center gap-4">
 						<form>
 							<div className="relative">
 								<Input
