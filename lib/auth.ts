@@ -45,10 +45,10 @@ export async function signup(state: FormState, formData: FormData) {
       })
       .returning({ id: users.id });
 
+    // 5. Create a session for the user
     if (data && data.length > 0) {
       const user = data[0];
-      // 5. Create a session for the user
-      createSession(user.id);
+      await createSession(user.id);
     }
   } catch (error) {
     return {
