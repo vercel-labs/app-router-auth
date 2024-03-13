@@ -1,6 +1,5 @@
 import Link from "next/link"
-import { SignupForm } from "@/app/(marketing)/signup/form"
-
+import { SignupForm } from "@/app/(public)/signup/form"
 export default function Page() {
   return (
     <div className="flex items-center w-1/4 px-4 sm:px-6 lg:px-8">
