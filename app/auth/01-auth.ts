@@ -55,8 +55,8 @@ export async function signup(
 
     // 5. Create a session for the user
     if (data && data.length > 0) {
-      const user = data[0];
-      await createSession(user.id);
+      const userId = data[0].id.toString();
+      await createSession(userId);
     }
   } catch (error) {
     return {
@@ -105,7 +105,8 @@ export async function login(
     }
 
     // 5. If login successful, create a session for the user
-    await createSession(user.id);
+    const userId = user.id.toString();
+    await createSession(userId);
   } catch (error) {
     return errorMessage;
   }
