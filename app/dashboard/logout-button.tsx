@@ -1,6 +1,6 @@
 'use client';
 
-import { logout } from '@/lib/auth';
+import { logout } from '@/app/auth/01-auth';
 import { LogOutIcon } from '@/components/ui/icons';
 export default function LogoutButton() {
   return (

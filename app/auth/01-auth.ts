@@ -1,6 +1,9 @@
-// this file includes the authentication logic for
-// signing up, logging in, and logging out.
-// see `session.ts` for the session management logic.
+// This file includes the authentication logic for
+// signing up, logging in, and logging out using Server Actions.
+// See `02-session.ts` for the session management logic.
+
+// We're querying the database directly
+// but at this point, we should recommend calling an Auth Provider's API.
 
 'use server';
 
@@ -10,13 +13,16 @@ import {
   FormState,
   LoginFormSchema,
   SignupFormSchema,
-} from '@/lib/definitions';
-import { createSession, deleteSession } from '@/lib/session';
+} from '@/app/auth/definitions';
+import { createSession, deleteSession } from '@/app/auth/02-session';
 import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 
-export async function signup(state: FormState, formData: FormData) {
+export async function signup(
+  state: FormState,
+  formData: FormData,
+): Promise<FormState> {
   // 1. Validate form fields
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get('name'),
@@ -59,51 +65,53 @@ export async function signup(state: FormState, formData: FormData) {
   }
 }
 
-export async function login(state: FormState, formData: FormData) {
+export async function login(
+  state: FormState,
+  formData: FormData,
+): Promise<FormState> {
   // 1. Validate form fields
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
   });
+  const errorMessage = { message: 'Invalid login credentials.' };
 
   // 2. If any form fields are invalid, return early and display errors
   if (!validatedFields.success) {
     return {
-      message: validatedFields.error.flatten().fieldErrors,
+      errors: validatedFields.error.flatten().fieldErrors,
     };
   }
 
   // 3. Query the database for the user with the given email
-  const user = await db.query.users.findFirst({
-    where: eq(users.email, validatedFields.data.email),
-  });
+  try {
+    const user = await db.query.users.findFirst({
+      where: eq(users.email, validatedFields.data.email),
+    });
 
-  // If user is not found, return an error
-  if (!user) {
-    return {
-      message: 'No user found with that email.',
-    };
+    // If user is not found, return early and display an error
+    if (!user) {
+      return errorMessage;
+    }
+    // 4. Compare the user's password with the hashed password in the database
+    const passwordMatch = await bcrypt.compare(
+      validatedFields.data.password,
+      user.password,
+    );
+
+    // If the password does not match, return early and display an error
+    if (!passwordMatch) {
+      return errorMessage;
+    }
+
+    // 5. If login successful, create a session for the user
+    await createSession(user.id);
+  } catch (error) {
+    return errorMessage;
   }
-
-  // 4. Compare the user's password with the hashed password in the database
-  const passwordMatch = await bcrypt.compare(
-    validatedFields.data.password,
-    user.password,
-  );
-
-  // If the password does not match, return an error
-  if (!passwordMatch) {
-    return {
-      message: 'Invalid login credentials.',
-    };
-  }
-
-  // 5. If the password is correct, create a session for the user
-  await createSession(user.id);
 }
 
 export async function logout() {
-  console.log('logging out');
   deleteSession();
   redirect('/login');
 }

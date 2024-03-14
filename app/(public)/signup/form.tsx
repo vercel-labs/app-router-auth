@@ -3,7 +3,7 @@
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { signup } from '@/lib/auth';
+import { signup } from '@/app/auth/01-auth';
 import { useFormState, useFormStatus } from 'react-dom';
 
 export function SignupForm() {
@@ -35,7 +35,9 @@ export function SignupForm() {
           <p>Password must:</p>
           <ul>
             {state.errors.password.map((error) => (
-              <li key={error}>- {error}</li>
+              <li key={error} className="text-red-500">
+                - {error}
+              </li>
             ))}
           </ul>
         </div>
