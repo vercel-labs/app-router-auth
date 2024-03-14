@@ -1,6 +1,7 @@
-// This file includes the session management logic
-// It's the 2nd part of the auth process
-// See `01-auth.ts` for the authentication logic
+// Option 1: Client-side stateless session with cookies | Optimistic auth check
+// Option 2 (this file): Server-side sessions with tokens (or session ID) stored in a database | Secure auth check
+
+// This file goes through **servers-side session** management
 // See `middleware.ts` and `03-dal.ts` for the authorization / data access logic
 
 import 'server-only';
@@ -14,16 +15,23 @@ import { cookies } from 'next/headers';
 // TODO: Replace with secret key from environment variables
 const secretKey = 'yourSecretKey';
 
-// Option 1: Client-side stateless session with cookies | Optimistic auth check
-// Option 2: Server-side sessions with tokens (or session ID) stored in a database | Secure auth check
-
 export async function createSession(id: number) {
   const token = jwt.sign({ id }, secretKey, {
     expiresIn: '1h',
   });
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
-  // Option 1: Send cookie from server to client
+  // 1. Store token (or session ID) in database
+  const data = await db
+    .insert(sessions)
+    .values({
+      userId: id,
+      token,
+      expiresAt,
+    })
+    .returning({ token: sessions.token });
+
+  // 2. Set token in cookies to be read in middleware
   cookies().set('token', token, {
     httpOnly: true,
     secure: true,
@@ -31,41 +39,17 @@ export async function createSession(id: number) {
     sameSite: 'lax',
     path: '/',
   });
-
-  // Option 2: Store token in database
-  const data = await db
-    .insert(sessions)
-    .values({
-      userId: id,
-      token, // or session ID
-      expiresAt,
-    })
-    .returning({ token: sessions.token });
-
-  // Store session ID in a cookie...
 }
 
-// Option 1: Optimistically check for token in cookies
-export async function verifyClientSession() {
-  const token = cookies().get('token')?.value;
+// If invoking this function from:
+// - Middleware, pass token from the request header
+// - Server Actions or Server Components, use `cookies()`
+// - Route handler, can use either headers or cookies
+
+export async function verifyServerSession(token: string | undefined) {
+  // const token = cookies().get('token')?.value;
   if (!token) return null;
 
-  try {
-    const { id } = jwt.verify(token, secretKey) as { id: number };
-    if (!id) return null;
-    return { isAuth: true, userId: id };
-  } catch (error) {
-    return null;
-  }
-}
-
-// Option 2: Securely check for token in the database
-export async function verifyServerSession() {
-  const token = cookies().get('token')?.value;
-
-  if (!token) return null;
-
-  // This is nuts
   try {
     const data = await db
       .select({
@@ -85,8 +69,6 @@ export async function verifyServerSession() {
 export function updateSession() {}
 
 export function deleteSession() {
-  // Option 1
   cookies().delete('token');
-
-  // Option 2
+  // TODO: Delete token from database
 }

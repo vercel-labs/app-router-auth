@@ -1,6 +1,6 @@
 // This file includes the authentication logic for
 // signing up, logging in, and logging out using Server Actions.
-// See `02-session.ts` for the session management logic.
+// See `02-` for the session management logic.
 
 // We're querying the database directly
 // but at this point, we should recommend calling an Auth Provider's API.
@@ -14,7 +14,7 @@ import {
   LoginFormSchema,
   SignupFormSchema,
 } from '@/app/auth/definitions';
-import { createSession, deleteSession } from '@/app/auth/02-session';
+import { createSession, deleteSession } from '@/app/auth/02-client-session';
 import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
