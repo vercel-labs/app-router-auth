@@ -18,7 +18,7 @@ import type { SessionPayload } from '@/app/auth/definitions';
 const secretKey = 'yourSecretKey';
 const key = new TextEncoder().encode(secretKey);
 
-async function encrypt(payload: SessionPayload) {
+export async function encrypt(payload: SessionPayload) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
@@ -26,11 +26,16 @@ async function encrypt(payload: SessionPayload) {
     .sign(key);
 }
 
-async function decrypt(userId: string) {
-  const { payload } = await jwtVerify(userId, key, {
-    algorithms: ['HS256'],
-  });
-  return payload;
+export async function decrypt(session: string | undefined = '') {
+  try {
+    const { payload } = await jwtVerify(session, key, {
+      algorithms: ['HS256'],
+    });
+    return payload;
+  } catch (error) {
+    console.log('Failed to verify session');
+    return null;
+  }
 }
 
 export async function createSession(userId: string) {
