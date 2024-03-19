@@ -38,7 +38,7 @@ export function LoginForm() {
         </div>
         {state?.message && <p className="text-red-500">{state.message}</p>}
         <LoginFormButton />
-        <Button className="w-full" variant="outline">
+        <Button className="w-full" variant="outline" type="submit">
           Login with Google
         </Button>
       </div>
