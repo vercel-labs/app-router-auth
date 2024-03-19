@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyClientSession } from '@/app/auth/02-client-session';
+import { verifyClientSession } from '@/app/auth/02-stateless-session';
 
 // Client Sessions can be verified in Middleware
 // as we're only checking for a cookie in the headers

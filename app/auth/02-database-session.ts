@@ -1,8 +1,18 @@
-// Option 1: Client-side stateless session with cookies | Optimistic auth check
-// Option 2 (this file): Server-side sessions with tokens (or session ID) stored in a database | Secure auth check
+// Option 1: Stateless session with cookies | Optimistic auth
+// Option 2 (this file): Database sessions with tokens (or session ID) stored in a database | Secure auth
 
 // This file goes through **servers-side session** management
 // See `middleware.ts` and `03-dal.ts` for the authorization / data access logic
+
+// Store session ID, encrypted in a cookie
+// Ensure the user is logged with the cookies (optimistic)
+// Combine database with stateless session
+// A session can contain more information than the current state, e.g. role, expiresAt, etc.
+// Solving out of sync issues with database <> cookie
+
+// Look into vercel kv / redis for storing sessions (for faster data retrieval)
+// Discuss handling multiple devices (benefit of using database session)
+// https://authjs.dev/concepts/session-strategies
 
 import 'server-only';
 

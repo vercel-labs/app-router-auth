@@ -14,7 +14,7 @@ import {
   LoginFormSchema,
   SignupFormSchema,
 } from '@/app/auth/definitions';
-import { createSession, deleteSession } from '@/app/auth/02-client-session';
+import { createSession, deleteSession } from '@/app/auth/02-stateless-session';
 import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
