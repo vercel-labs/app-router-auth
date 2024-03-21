@@ -23,6 +23,7 @@ import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 
 // TODO: Replace with secret key from environment variables
+// Update to use jose instead of jwt
 const secretKey = 'yourSecretKey';
 
 export async function createSession(id: number) {
@@ -56,7 +57,7 @@ export async function createSession(id: number) {
 // - Server Actions or Server Components, use `cookies()`
 // - Route handler, can use either headers or cookies
 
-export async function verifyServerSession(token: string | undefined) {
+export async function verifySession(token: string | undefined) {
   // const token = cookies().get('token')?.value;
   if (!token) return null;
 

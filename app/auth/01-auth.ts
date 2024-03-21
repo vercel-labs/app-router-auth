@@ -30,39 +30,40 @@ export async function signup(
     password: formData.get('password'),
   });
 
-  // 2. If any form fields are invalid, return early and display errors
+  // If any form fields are invalid, return early
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     };
   }
 
-  // 3. Prepare data for insertion into database
+  // 2. Prepare data for insertion into database
   const { name, email, password } = validatedFields.data;
-  // 3.1 Hash the user's password
+  // Hash the user's password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // 4. Insert the user into the database
-  try {
-    const data = await db
-      .insert(users)
-      .values({
-        name,
-        email,
-        password: hashedPassword,
-      })
-      .returning({ id: users.id });
+  // 3. Insert the user into the database or call an Auth Provider's API
+  const data = await db
+    .insert(users)
+    .values({
+      name,
+      email,
+      password: hashedPassword,
+    })
+    .returning({ id: users.id });
 
-    // 5. Create a session for the user
-    if (data && data.length > 0) {
-      const userId = data[0].id.toString();
-      await createSession(userId);
-    }
-  } catch (error) {
+  const user = data[0];
+
+  if (!user) {
     return {
       message: 'An error occurred while creating your account.',
     };
   }
+
+  // 4. Create a session for the user
+  const userId = user.id.toString();
+  await createSession(userId);
+  redirect('/dashboard');
 }
 
 export async function login(
@@ -76,40 +77,37 @@ export async function login(
   });
   const errorMessage = { message: 'Invalid login credentials.' };
 
-  // 2. If any form fields are invalid, return early and display errors
+  // If any form fields are invalid, return early
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
     };
   }
 
-  // 3. Query the database for the user with the given email
-  try {
-    const user = await db.query.users.findFirst({
-      where: eq(users.email, validatedFields.data.email),
-    });
+  // 2. Query the database for the user with the given email
+  const user = await db.query.users.findFirst({
+    where: eq(users.email, validatedFields.data.email),
+  });
 
-    // If user is not found, return early and display an error
-    if (!user) {
-      return errorMessage;
-    }
-    // 4. Compare the user's password with the hashed password in the database
-    const passwordMatch = await bcrypt.compare(
-      validatedFields.data.password,
-      user.password,
-    );
-
-    // If the password does not match, return early and display an error
-    if (!passwordMatch) {
-      return errorMessage;
-    }
-
-    // 5. If login successful, create a session for the user
-    const userId = user.id.toString();
-    await createSession(userId);
-  } catch (error) {
+  // If user is not found, return early
+  if (!user) {
     return errorMessage;
   }
+  // 3. Compare the user's password with the hashed password in the database
+  const passwordMatch = await bcrypt.compare(
+    validatedFields.data.password,
+    user.password,
+  );
+
+  // If the password does not match, return early
+  if (!passwordMatch) {
+    return errorMessage;
+  }
+
+  // 4. If login successful, create a session for the user and redirect
+  const userId = user.id.toString();
+  await createSession(userId);
+  redirect('/dashboard');
 }
 
 export async function logout() {

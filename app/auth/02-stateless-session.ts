@@ -15,6 +15,7 @@ import { cookies } from 'next/headers';
 import type { SessionPayload } from '@/app/auth/definitions';
 
 // TODO: Replace with secret key from environment variables
+
 const secretKey = 'yourSecretKey';
 const key = new TextEncoder().encode(secretKey);
 
@@ -51,24 +52,7 @@ export async function createSession(userId: string) {
   });
 }
 
-// If invoking this function from:
-// - Middleware, pass token from the request header
-// - Server Actions or Server Components, use `cookies()`
-// - Route handler, can use either headers or cookies
-
-export async function verifyClientSession(session: string | undefined) {
-  // const session = cookies().get('session')?.value;
-  if (!session) return null;
-
-  try {
-    const { userId } = await decrypt(session);
-    return { isAuth: true, userId };
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-}
-
+// Rabbit hole
 export function updateSession() {}
 
 export function deleteSession() {
