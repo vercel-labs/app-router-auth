@@ -19,7 +19,6 @@ export function SignupForm() {
         <p className="text-red-500">{state.errors.name}</p>
       )}
       <div className="space-y-2">
-        {/* TODO: Check if email is already used */}
         <Label htmlFor="email">Email</Label>
         <Input id="email" name="email" placeholder="john@example.com" />
       </div>
@@ -47,13 +46,12 @@ export function SignupForm() {
   );
 }
 
-function SignupButton() {
-  // TODO: Style button pending state
+export function SignupButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button className="w-full" type="submit">
-      Register
+    <Button aria-disabled={pending} type="submit">
+      {pending ? 'Submitting...' : 'Sign up'}
     </Button>
   );
 }

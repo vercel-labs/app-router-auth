@@ -1,10 +1,3 @@
-// This file includes the authentication logic for
-// signing up, logging in, and logging out using Server Actions.
-// See `02-` for the session management logic.
-
-// We're querying the database directly
-// but at this point, we should recommend calling an Auth Provider's API.
-
 'use server';
 
 import { db } from '@/drizzle/db';
@@ -39,6 +32,18 @@ export async function signup(
 
   // 2. Prepare data for insertion into database
   const { name, email, password } = validatedFields.data;
+
+  // 3. Check if the user's email already exists
+  const existingUser = await db.query.users.findFirst({
+    where: eq(users.email, email),
+  });
+
+  if (existingUser) {
+    return {
+      message: 'Email already exists, please use a different email or login.',
+    };
+  }
+
   // Hash the user's password
   const hashedPassword = await bcrypt.hash(password, 10);
 

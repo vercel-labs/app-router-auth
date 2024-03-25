@@ -9,6 +9,7 @@ import { useFormState, useFormStatus } from 'react-dom';
 
 export function LoginForm() {
   const [state, action] = useFormState(login, undefined);
+
   return (
     <form action={action}>
       <div className="space-y-4">
@@ -37,10 +38,7 @@ export function LoginForm() {
           )}
         </div>
         {state?.message && <p className="text-red-500">{state.message}</p>}
-        <LoginFormButton />
-        <Button className="w-full" variant="outline" type="submit">
-          Login with Google
-        </Button>
+        <LoginButton />
       </div>
 
       <div className="mt-4 text-center text-sm">
@@ -53,14 +51,12 @@ export function LoginForm() {
   );
 }
 
-function LoginFormButton() {
-  // TODO: Style button pending state
-
+export function LoginButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button className="w-full" type="submit">
-      Login
+    <Button aria-disabled={pending} type="submit">
+      {pending ? 'Submitting...' : 'Sign up'}
     </Button>
   );
 }

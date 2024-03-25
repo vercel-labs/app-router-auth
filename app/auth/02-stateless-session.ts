@@ -1,22 +1,10 @@
-// Option 1 (this file): Stateless session with cookies | Optimistic auth check
-// Option 2: Database sessions with tokens (or session ID) stored in a database | Secure auth check
-
-// This file goes through **client-side session** management
-// See `middleware.ts` and `03-dal.ts` for the authorization / data access logic
-
-// Recommend jose as it supports Edge Runtime (Middleware)
-
-// Context: next.config.js is hard to maintain (e.g i18n)
-
 import 'server-only';
 
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import type { SessionPayload } from '@/app/auth/definitions';
 
-// TODO: Replace with secret key from environment variables
-
-const secretKey = 'yourSecretKey';
+const secretKey = process.env.SECRET;
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: SessionPayload) {
@@ -52,8 +40,23 @@ export async function createSession(userId: string) {
   });
 }
 
-// Rabbit hole
-export function updateSession() {}
+export async function updateSession() {
+  const session = cookies().get('session')?.value;
+  const payload = await decrypt(session);
+
+  if (!session || !payload) {
+    return null;
+  }
+
+  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  cookies().set('session', session, {
+    httpOnly: true,
+    secure: true,
+    expires: expires,
+    sameSite: 'lax',
+    path: '/',
+  });
+}
 
 export function deleteSession() {
   cookies().delete('session');
