@@ -14,23 +14,19 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <div className="border-b border-gray-100 dark:border-gray-700">
-        <div className="container mx-auto flex max-w-7xl items-center justify-end px-4 py-4 md:justify-between md:px-6">
+    <div>
+      <div className="border-b border-gray-100">
+        <div className="container mx-auto flex max-w-7xl items-center justify-end p-4 md:justify-between md:px-6">
           <nav className="hidden items-center space-x-4 text-sm md:flex">
             {links.map((link) => (
-              <Link
-                className=" text-gray-900 dark:text-white"
-                href={link.href}
-                key={link.title}
-              >
+              <Link className="text-gray-900" href={link.href} key={link.title}>
                 {link.title}
               </Link>
             ))}
           </nav>
           <div className="hidden items-center space-x-4 md:flex">
             <Link
-              className="inline-flex h-8 items-center justify-center rounded-md border border-gray-200 bg-white px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:text-black"
+              className="rounded-md border px-4 py-1.5 text-sm font-medium transition-colors hover:border-black hover:bg-black hover:text-white"
               href="/login"
             >
               Login
@@ -38,7 +34,7 @@ export default function Layout({
           </div>
           <div className="flex items-center space-x-4 md:hidden">
             <Link
-              className="inline-flex h-8 items-center rounded-md border border-gray-200 bg-white px-3 text-sm font-medium dark:text-black"
+              className="inline-flex h-8 items-center rounded-md border border-gray-200 bg-white px-3 text-sm font-medium"
               href="/login"
             >
               Login
@@ -51,7 +47,7 @@ export default function Layout({
         </div>
       </div>
 
-      <main className="flex flex-1 items-center justify-center">
+      <main className="container mx-auto mt-36 flex max-w-7xl justify-center">
         {children}
       </main>
     </div>
