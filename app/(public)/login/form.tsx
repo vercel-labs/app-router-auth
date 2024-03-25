@@ -12,8 +12,8 @@ export function LoginForm() {
 
   return (
     <form action={action}>
-      <div className="space-y-4">
-        <div className="space-y-2">
+      <div className="flex flex-col gap-2">
+        <div>
           <Label htmlFor="email">Email</Label>
           <Input
             id="email"
@@ -22,30 +22,25 @@ export function LoginForm() {
             type="email"
           />
           {state?.errors?.email && (
-            <p className="text-red-500">{state.errors.email}</p>
+            <p className="text-sm text-red-500">{state.errors.email}</p>
           )}
         </div>
-        <div className="space-y-2">
-          <div className="flex items-center">
+        <div className="mt-4">
+          <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            <Link className="ml-auto inline-block text-sm underline" href="#">
+            <Link className="text-sm underline" href="#">
               Forgot your password?
             </Link>
           </div>
           <Input id="password" type="password" name="password" />
           {state?.errors?.password && (
-            <p className="text-red-500">{state.errors.password}</p>
+            <p className="text-sm text-red-500">{state.errors.password}</p>
           )}
         </div>
-        {state?.message && <p className="text-red-500">{state.message}</p>}
+        {state?.message && (
+          <p className="text-sm text-red-500">{state.message}</p>
+        )}
         <LoginButton />
-      </div>
-
-      <div className="mt-4 text-center text-sm">
-        Don&apos;t have an account?{' '}
-        <Link className="underline" href="/signup">
-          Sign up
-        </Link>
       </div>
     </form>
   );
@@ -55,7 +50,7 @@ export function LoginButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button aria-disabled={pending} type="submit">
+    <Button aria-disabled={pending} type="submit" className="mt-4 w-full">
       {pending ? 'Submitting...' : 'Sign up'}
     </Button>
   );
