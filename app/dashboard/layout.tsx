@@ -1,28 +1,29 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  HomeIcon,
-  LineChartIcon,
-  LogOutIcon,
-  PackageIcon,
-  ShoppingCartIcon,
-  UsersIcon,
-} from '@/components/ui/icons';
+import LogoutButton from './logout-button';
+import { PackageIcon } from '@/components/ui/icons';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getUser } from '@/app/auth/03-dal';
 
-export default function Layout({
+const navLinks = [
+  { title: 'Home', href: '/dashboard', badge: 0 },
+  { title: 'Orders', href: '#', badge: 3 },
+  { title: 'Products', href: '#', badge: 0 },
+  { title: 'Customers', href: '#', badge: 0 },
+  { title: 'Analytics', href: '#', badge: 0 },
+];
+
+export default async function Layout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
-  const navLinks = [
-    { title: 'Home', href: '/dashboard', badge: 0 },
-    { title: 'Orders', href: '#', badge: 3 },
-    { title: 'Products', href: '#', badge: 0 },
-    { title: 'Customers', href: '#', badge: 0 },
-    { title: 'Analytics', href: '#', badge: 0 },
-  ];
+}: {
+  children: React.ReactNode;
+}) {
+  const user = await getUser();
+
   const activeLink = '/dashboard';
+
   return (
     <div className="flex min-h-screen w-full">
       <div className="hidden w-80 border-r lg:block dark:border-gray-700">
@@ -56,13 +57,7 @@ export default function Layout({
             </nav>
           </div>
           <div className="border-t p-4 dark:border-gray-700">
-            <Link
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition-all hover:text-gray-900 hover:dark:text-gray-300"
-              href="#"
-            >
-              <LogOutIcon className="h-4 w-4" />
-              Logout
-            </Link>
+            <LogoutButton />
           </div>
         </div>
       </div>

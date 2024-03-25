@@ -1,9 +1,8 @@
-import '@/be/envConfig';
+import '@/drizzle/envConfig';
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
-  schema: './be/schema.ts',
-  out: './be/drizzle',
+  schema: './drizzle/schema.ts',
   driver: 'pg',
   dbCredentials: {
     connectionString: process.env.POSTGRES_URL!,
