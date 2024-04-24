@@ -1,8 +1,9 @@
 import 'server-only';
 
+import type { SessionPayload } from '@/app/auth/definitions';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
-import type { SessionPayload } from '@/app/auth/definitions';
+import { redirect } from 'next/navigation';
 
 const secretKey = process.env.SECRET;
 const key = new TextEncoder().encode(secretKey);
@@ -22,7 +23,6 @@ export async function decrypt(session: string | undefined = '') {
     });
     return payload;
   } catch (error) {
-    console.log('Failed to verify session');
     return null;
   }
 }
@@ -38,6 +38,17 @@ export async function createSession(userId: string) {
     sameSite: 'lax',
     path: '/',
   });
+}
+
+export async function verifySession() {
+  const cookie = cookies().get('session')?.value;
+  const session = await decrypt(cookie);
+
+  if (!session?.userId) {
+    redirect('/login');
+  }
+
+  return { isAuth: true, userId: Number(session.userId) };
 }
 
 export async function updateSession() {
