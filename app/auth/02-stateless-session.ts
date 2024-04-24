@@ -38,6 +38,8 @@ export async function createSession(userId: string) {
     sameSite: 'lax',
     path: '/',
   });
+
+  redirect('/dashboard');
 }
 
 export async function verifySession() {
@@ -71,4 +73,5 @@ export async function updateSession() {
 
 export function deleteSession() {
   cookies().delete('session');
+  redirect('/login');
 }

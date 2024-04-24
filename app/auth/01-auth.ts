@@ -10,7 +10,6 @@ import {
 import { createSession, deleteSession } from '@/app/auth/02-stateless-session';
 import bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
-import { redirect } from 'next/navigation';
 
 export async function signup(
   state: FormState,
@@ -68,7 +67,6 @@ export async function signup(
   // 4. Create a session for the user
   const userId = user.id.toString();
   await createSession(userId);
-  redirect('/dashboard');
 }
 
 export async function login(
@@ -112,10 +110,8 @@ export async function login(
   // 4. If login successful, create a session for the user and redirect
   const userId = user.id.toString();
   await createSession(userId);
-  redirect('/dashboard');
 }
 
 export async function logout() {
   deleteSession();
-  redirect('/login');
 }
