@@ -51,7 +51,7 @@ export function SignupButton() {
 
   return (
     <Button aria-disabled={pending} type="submit" className="mt-2 w-full">
-      {pending ? 'Submitting...' : 'Sign up'}
+      {pending ? 'Submitting...' : 'Login'}
     </Button>
   );
 }
