@@ -71,31 +71,7 @@ export default async function Layout({
             <span className="sr-only">Home</span>
           </Link>
           <h1 className="md:blobk hidden text-lg font-semibold">Dashboard</h1>
-          <div className="ml-auto flex items-center gap-4">
-            <form>
-              <div className="relative">
-                <Input
-                  className="bg-gray-100/60 md:w-[200px]"
-                  placeholder="Search orders..."
-                  type="search"
-                />
-              </div>
-            </form>
-            <Button className="rounded-full" size="icon" variant="ghost">
-              <Image
-                alt="Avatar"
-                className="rounded-full"
-                height="32"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: '32/32',
-                  objectFit: 'cover',
-                }}
-                width="32"
-              />
-              <span className="sr-only">View profile</span>
-            </Button>
-          </div>
+          <div className="ml-auto flex items-center gap-4">Welcome, {user?.name}!</div>
         </header>
         <main className="flex-1 p-4 md:p-6">{children}</main>
       </div>

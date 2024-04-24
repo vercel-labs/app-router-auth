@@ -5,9 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { signup } from '@/app/auth/01-auth';
 import { useFormState, useFormStatus } from 'react-dom';
+import { PasswordInput } from '@/components/ui/PasswordInput ';
+import { useState } from 'react';
 
 export function SignupForm() {
   const [state, action] = useFormState(signup, undefined);
+  const [password, setPassword] = useState('');
 
   return (
     <form action={action}>
@@ -28,7 +31,13 @@ export function SignupForm() {
         )}
         <div>
           <Label htmlFor="password">Password</Label>
-          <Input id="password" name="password" type="password" />
+          <PasswordInput
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            id="password"
+            name="password"
+            placeholder="******"
+          />
         </div>
         {state?.errors?.password && (
           <div className="text-sm text-red-500">
@@ -51,7 +60,7 @@ export function SignupButton() {
 
   return (
     <Button aria-disabled={pending} type="submit" className="mt-2 w-full">
-      {pending ? 'Submitting...' : 'Login'}
+      {pending ? 'Submitting...' : 'Sign up'}
     </Button>
   );
 }

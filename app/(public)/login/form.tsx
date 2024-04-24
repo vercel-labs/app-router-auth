@@ -6,9 +6,12 @@ import { Label } from '@/components/ui/label';
 import { login } from '@/app/auth/01-auth';
 import Link from 'next/link';
 import { useFormState, useFormStatus } from 'react-dom';
+import { PasswordInput } from '@/components/ui/PasswordInput ';
+import { useState } from 'react';
 
 export function LoginForm() {
   const [state, action] = useFormState(login, undefined);
+  const [password, setPassword] = useState('');
 
   return (
     <form action={action}>
@@ -32,7 +35,13 @@ export function LoginForm() {
               Forgot your password?
             </Link>
           </div>
-          <Input id="password" type="password" name="password" />
+          <PasswordInput
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            id="password"
+            name="password"
+            placeholder="******"
+          />
           {state?.errors?.password && (
             <p className="text-sm text-red-500">{state.errors.password}</p>
           )}
@@ -51,7 +60,7 @@ export function LoginButton() {
 
   return (
     <Button aria-disabled={pending} type="submit" className="mt-4 w-full">
-      {pending ? 'Submitting...' : 'Sign up'}
+      {pending ? 'Submitting...' : 'Login'}
     </Button>
   );
 }
