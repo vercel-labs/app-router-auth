@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 const secretKey = process.env.SECRET;
+if (!secretKey?.length) throw new Error('SECRET environment variable is required');
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: SessionPayload) {
@@ -23,6 +24,7 @@ export async function decrypt(session: string | undefined = '') {
     });
     return payload;
   } catch (error) {
+    console.log('Failed to verify session');
     return null;
   }
 }

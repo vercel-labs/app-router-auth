@@ -7,6 +7,7 @@ import { sessions } from '@/drizzle/schema';
 import { db } from '@/drizzle/db';
 
 const secretKey = process.env.SECRET;
+if (!secretKey?.length) throw new Error('SECRET environment variable is required');
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: SessionPayload) {
