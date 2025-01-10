@@ -1,14 +1,16 @@
 'use client';
 
+import { useActionState } from "react";
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { login } from '@/app/auth/01-auth';
 import Link from 'next/link';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormStatus } from 'react-dom';
 
 export function LoginForm() {
-  const [state, action] = useFormState(login, undefined);
+  const [state, action] = useActionState(login, undefined);
 
   return (
     <form action={action}>
@@ -40,18 +42,18 @@ export function LoginForm() {
         {state?.message && (
           <p className="text-sm text-red-500">{state.message}</p>
         )}
-        <LoginButton />
+        <LoginButton title="Sign in" />
       </div>
     </form>
   );
 }
 
-export function LoginButton() {
+export function LoginButton({title = 'Sign up'}: {title?: string}) {
   const { pending } = useFormStatus();
 
   return (
     <Button aria-disabled={pending} type="submit" className="mt-4 w-full">
-      {pending ? 'Submitting...' : 'Sign up'}
+      {pending ? 'Submitting...' : title}
     </Button>
   );
 }
