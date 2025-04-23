@@ -5,7 +5,6 @@ import {
   uniqueIndex,
   integer,
   timestamp,
-  time,
 } from 'drizzle-orm/pg-core';
 import { InferInsertModel } from 'drizzle-orm';
 
